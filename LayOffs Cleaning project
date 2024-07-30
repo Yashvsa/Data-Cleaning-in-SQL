@@ -1,4 +1,4 @@
-
+```sql
 -- 1. Create a copy of raw dataset
 
 CREATE TABLE Layoffs_staging
