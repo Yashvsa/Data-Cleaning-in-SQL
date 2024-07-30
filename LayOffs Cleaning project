@@ -62,4 +62,48 @@ SELECT company, trim(company) FROM layoffs_staging2;
 UPDATE layoffs_staging2 
 SET company = trim(company);
 
+-- Change date to time column from text
+SELECT `date`, str_to_date(`date`, '%m/%d/%Y') FROM layoffs_staging2;
 
+UPDATE layoffs_staging2
+SET `date` = str_to_date(`date`, '%m/%d/%Y');
+
+SELECT `date` FROM layoffs_staging2;
+
+ALTER TABLE layoffs_staging2
+MODIFY COLUMN `date` DATE;
+
+
+
+UPDATE layoffs_staging2 SET 
+industry = NULL
+where industry = '';
+
+SELECT t1.industry, t2.industry FROM layoffs_staging2 t1
+INNER JOIN layoffs_staging2 t2
+ON t1.company = t2.company 
+AND t1.location = t2.location
+WHERE t1.industry IS NULL
+AND t2.industry IS NOT NULL;
+
+UPDATE layoffs_staging2 t1
+JOIN layoffs_staging2 t2
+ON t1.company = t2.company
+SET t1.industry = t2.industry
+WHERE t1.industry IS NULL 
+AND t2.industry IS NOT NULL;
+
+
+SELECT count(*) FROM layoffs_staging2; -- Check Count of records
+
+DELETE FROM layoffs_staging2 WHERE total_laid_off IS NULL
+AND percentage_laid_off IS NULL;
+
+
+SELECT count(*) FROM layoffs_staging2; -- Check count of records to compare with previous count if duplicates were null 
+
+
+-- 4. removing the rows or columns
+
+ALTER TABLE layoffs_staging2 
+DROP COLUMN ROW_NUM;
