@@ -1,0 +1,7 @@
+
+-- create a copy of raw dataset
+
+CREATE TABLE Layoffs_staging
+LIKE layoffs
+
+SELECT * FROM layoffs_staging
